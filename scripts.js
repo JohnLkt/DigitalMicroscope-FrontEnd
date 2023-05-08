@@ -1,4 +1,7 @@
 let userCamera = document.getElementById('userCamera');
+let cameraSelect = document.getElementById('videoSource');
+
+
 let captureButton = document.getElementById('captureButton');
 let carousel = document.getElementById('carousel');
 let modal = document.getElementById('myModal');
@@ -7,14 +10,61 @@ let closeModalButton = document.getElementById('closeModalButton');
 let downloadModalButton = document.getElementById('downloadModalButton');
 let selectedImage = null;
 
-// Get available media devices
-navigator.mediaDevices.getUserMedia({ video: true })
-      .then(function(stream) {
-        userCamera.srcObject = stream;
-      })
-      .catch(function(error) {
-        console.log("Error accessing the camera: ", error);
-      });
+'use strict';
+
+cameraSelect.onchange = getStream;
+
+function getDevices() {
+  // AFAICT in Safari this only gets default devices until gUM is called :/
+  return navigator.mediaDevices.enumerateDevices();
+}
+
+function gotDevices(deviceInfos) {
+  window.deviceInfos = deviceInfos; // make available to console
+  console.log('Available input and output devices:', deviceInfos);
+  for (const deviceInfo of deviceInfos) {
+    const option = document.createElement('option');
+    option.value = deviceInfo.deviceId;
+    if (deviceInfo.kind === 'videoinput') {
+      option.text = deviceInfo.label || `Camera ${cameraSelect.length + 1}`;
+      cameraSelect.appendChild(option);
+    }
+  }
+}
+
+function getStream() {
+  if (window.stream) {
+    window.stream.getTracks().forEach(track => {
+      track.stop();
+    });
+  }
+  const videoSource = cameraSelect.value;
+  const constraints = {
+    video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+  };
+  return navigator.mediaDevices.getUserMedia(constraints).
+    then(gotStream).catch(handleError);
+}
+
+function gotStream(stream) {
+  window.stream = stream; // make stream available to console
+  cameraSelect.selectedIndex = [...cameraSelect.options].
+    findIndex(option => option.text === stream.getVideoTracks()[0].label);
+  userCamera.srcObject = stream;
+}
+
+function handleError(error) {
+  console.error('Error: ', error);
+}
+
+getStream().then(getDevices).then(gotDevices);
+// navigator.mediaDevices.getUserMedia({ video: true ,facingMode: 'user'})
+//       .then(function(stream) {
+//         userCamera.srcObject = stream;
+//       })
+//       .catch(function(error) {
+//         console.log("Error accessing the camera: ", error);
+//       });
 
 // Capture image from video stream
 captureButton.addEventListener('click', function() {
