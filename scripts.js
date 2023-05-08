@@ -72,8 +72,45 @@ captureButton.addEventListener('click', function() {
     context.drawImage(userCamera, 0, 0, width, height);
 
     // Create a data URL containing the captured image
-    let dataUrl = canvas.toDataURL('image/png', 1);
+    canvas.toBlob(function(blob) {
+      // Create a FileReader to read the Blob data
+      var reader = new FileReader();
+  
+      reader.onloadend = function() {
+        // Get the data URL from the FileReader result
+        var dataUrl = reader.result;
+  
+        // Create a new carousel item
+        var carouselItem = document.createElement('div');
+        carouselItem.classList.add('carousel-item');
+  
+        // Create an image element for the captured image
+        var image = document.createElement('img');
+        image.classList.add('carousel-image');
+        image.src = dataUrl;
+  
+        // Append the image to the carousel item
+        carouselItem.appendChild(image);
+  
+        // Append the carousel item to the carousel
+        carousel.appendChild(carouselItem);
+  
+        // Scroll to the newly added carousel item
+        carouselItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
+        // Add click event listener to the image
+        image.addEventListener('click', () => {
+          // Set the selected image and display the modal
+          selectedImage = image;
+          modalImage.src = selectedImage.src;
+          modal.style.display = 'block';
+          });
+  
+        };
+
+        // Read the Blob data as a data URL
+        reader.readAsDataURL(blob);
+      }, 'image/png', 1.0);
     // Create a new carousel item
     let carouselItem = document.createElement('div');
     carouselItem.classList.add('carousel-item');
