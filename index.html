@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Microscope Control Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section>
+        <div id="cameraView">
+          <div id="cameraContainer">
+            <video id="userCamera" autoplay></video>
+            <div id="cameraButtons">
+              <button id="captureButton" class="button">Capture Image</button>
+            </div>
+          </div>
+          <div id="carouselContainer">
+            <div class="carousel" id="carousel"></div>
+          </div>
+          <div id="myModal" class="modal">
+            <span class="close">&times;</span>
+            <div class="modal-content">
+              <img id="modalImage" class="modal-image">
+              <div class="modal-buttons">
+                <button id="closeModalButton" class="button modal-close">Close</button>
+                <a id="downloadModalButton" download><button class="button">Download Image</button></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="controlsView">
+            <h1>Digital Microscope</h1>
+            <div id="controlPanel">
+              <label for="xPos">x-pos</label>
+              <div class="input-field">
+                <button class="inputs" id="xPosMin">-10</button>
+                <input type="number" id="xPos" class="inputs" >
+                <button class="inputs" id="xPosPlus">+10</button>
+              </div>
+              <label for="yPos">y-pos</label>
+              <div class="input-field">
+                <button class="inputs" id="yPosMin">-10</button>
+                <input type="number" id="yPos" class="inputs" >
+                <button class="inputs" id="yPosPlus">+10</button>
+              </div>
+              <label for="zPos">z-pos</label>
+              <div  class="input-field">
+                <button class="inputs" id="zPosMin">-10</button>
+                <input type="number" id="zPos" class="inputs" >
+                <button class="inputs" id="zPosPlus">+10</button>
+              </div>
+              <button class="button" >Move</button>
+            </div>
+        </div>
+    </section>
+    <script src="scripts.js"></script>
+</body>
+</html>
