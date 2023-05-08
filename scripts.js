@@ -1,7 +1,5 @@
 let userCamera = document.getElementById('userCamera');
 let cameraSelect = document.getElementById('videoSource');
-
-
 let captureButton = document.getElementById('captureButton');
 let carousel = document.getElementById('carousel');
 let modal = document.getElementById('myModal');
@@ -58,13 +56,6 @@ function handleError(error) {
 }
 
 getStream().then(getDevices).then(gotDevices);
-// navigator.mediaDevices.getUserMedia({ video: true ,facingMode: 'user'})
-//       .then(function(stream) {
-//         userCamera.srcObject = stream;
-//       })
-//       .catch(function(error) {
-//         console.log("Error accessing the camera: ", error);
-//       });
 
 // Capture image from video stream
 captureButton.addEventListener('click', function() {
@@ -81,7 +72,7 @@ captureButton.addEventListener('click', function() {
     context.drawImage(userCamera, 0, 0, width, height);
 
     // Create a data URL containing the captured image
-    let dataUrl = canvas.toDataURL('image/jpeg');
+    let dataUrl = canvas.toDataURL('image/png', 1);
 
     // Create a new carousel item
     let carouselItem = document.createElement('div');
